@@ -23,6 +23,7 @@ cache:
     - requirements.txt
 
 stages:
+  - build
   - lint
   - test
 
