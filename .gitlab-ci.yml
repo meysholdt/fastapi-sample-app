@@ -1,0 +1,25 @@
+image: python:3.10.14
+
+.poetry:
+  before_script:
+    - pip install poetry==1.8.3
+    - poetry config virtualenvs.in-project true
+    - poetry config cache-dir ${POETRY_CACHE_DIR}
+    - poetry export -f requirements.txt --output requirements.txt --without-hashes
+    - poetry config --list
+
+stages:
+  - lint
+  - test
+
+build-job:
+  extends: .poetry
+  stage: lint
+  script:
+    - ruff check
+
+pytest-job:
+  extends: .poetry
+  stage: test
+  script:
+    - pytest

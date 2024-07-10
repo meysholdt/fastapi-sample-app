@@ -1,0 +1,2 @@
+poetry 1.8.3 # datasource=pypi depName=poetry
+python 3.10.14 # datasource=github-tags depName=python/cpython
