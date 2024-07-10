@@ -39,7 +39,8 @@ build-job:
   needs:
     - install
   script:
-    - ruff check
+    - poetry install --with lint
+    - poetry run ruff check
 
 pytest-job:
   extends: .poetry
@@ -47,4 +48,5 @@ pytest-job:
   needs:
     - install
   script:
-    - pytest
+    - poetry install --with test
+    - poetry run pytest
