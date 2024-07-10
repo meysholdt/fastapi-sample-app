@@ -8,18 +8,42 @@ image: python:3.10.14
     - poetry export -f requirements.txt --output requirements.txt --without-hashes
     - poetry config --list
 
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  POETRY_CACHE_DIR: "$CI_PROJECT_DIR/.cache/poetry"
+
+cache:
+  key:
+    files:
+      - poetry.lock
+      - .gitlab-ci.yml
+  paths:
+    - $PIP_CACHE_DIR
+    - $POETRY_CACHE_DIR
+    - requirements.txt
+
 stages:
   - lint
   - test
 
+install:
+  extends: .poetry
+  stage: build
+  script:
+    - poetry install
+
 build-job:
   extends: .poetry
   stage: lint
+  needs:
+    - install
   script:
     - ruff check
 
 pytest-job:
   extends: .poetry
   stage: test
+  needs:
+    - install
   script:
     - pytest
